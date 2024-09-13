@@ -22,50 +22,30 @@
 #  
 #  
 
-import cv2
-import time
-from Video import Video as video
-from flask import Response
 from flask import Flask
-from flask import render_template
-from flask_classful import FlaskView
+from View.CameraView import CameraView
+from View.IndexView import IndexView
 
-app = Flask("CamStream")
+import argparse
 
-
-class CameraView(FlaskView):
-    camera = video.Video()
-    
-    def index(self):
-        return Response(self.generate(), mimetype = "multipart/x-mixed-replace; boundary=frame")
-
-    def generate(self):
-        while True:
-            time.sleep(0.05)
-            frame = CameraView.camera.frame()
-            if frame is None:
-                continue
-			# encode the frame in JPEG format
-            (flag, encodedImage) = cv2.imencode(".jpg", frame)
-            # ensure the frame was successfully encoded
-            if not flag:
-                continue
-            # yield the output frame in the byte format
-            yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
-
-
-CameraView.register(app)
-    
-@app.route("/")
-def index():
-    return render_template("./index.html")
-    
 
 def main(args):
-    app.run(host="0.0.0.0", port="8080", debug=True, threaded=True, use_reloader=False)
+    app = Flask("CamStream")
+
+    IndexView.register(app)
+    CameraView.register(app)
+
+    argsParser = argparse.ArgumentParser()
+    argsParser.add_argument("--port", type=int, default=8080, help="port to listen on", required=False)
+    argsParser.add_argument("--host", type=str, default="0.0.0.0", help="ip to bind", required=False)
+    argsParser.add_argument("--debug", action="store_true", default=False, help="debug mode", required=False)
+    args = vars(argsParser.parse_args())
+
+    app.run(host=args["host"], port=args["port"], debug=args["debug"], threaded=True, use_reloader=False)
+
     CameraView.camera.close()
 
 
 if __name__ == '__main__':
-    import sys 
+    import sys
     sys.exit(main(sys.argv))

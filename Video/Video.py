@@ -28,22 +28,21 @@ import time
 from imutils.video import VideoStream
 
 
-class Video():
+class Video:
     
-    def __init__(self):
+    def __init__(self, camera_id=0):
         
         self.outputFrame = None
         self.outputLock = threading.Lock()
         self.lastFrame = time.time()
         
-        self.stream = VideoStream(src=0).start()
-        time.sleep(2)
+        self.stream = VideoStream(src=camera_id).start()
         
         
     def frame(self):
         start = time.time()
         # print(f"{self.lastFrame} - {start} = {self.lastFrame - start}")
-        if start - self.lastFrame > 1:
+        if start - self.lastFrame > 0.05:
             _frame = self.stream.read()
             with self.outputLock:
                 self.outputFrame = _frame.copy()
