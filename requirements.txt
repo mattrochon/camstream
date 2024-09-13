@@ -1,0 +1,5 @@
+Flask~=2.0.3
+imutils~=0.5.4
+opencv-contrib-python~=4.10.0.84
+flask-classful~=0.14.2
+argumentparser~=1.2.1

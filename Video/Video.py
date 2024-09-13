@@ -22,7 +22,6 @@
 #  
 #  
 
-import cv2
 import threading
 import time
 from imutils.video import VideoStream
