@@ -41,7 +41,7 @@ def main(args):
     argsParser.add_argument("--debug", action="store_true", default=False, help="debug mode", required=False)
     args = vars(argsParser.parse_args())
 
-    app.run(host=args["host"], port=args["port"], debug=args["debug"], threaded=True, use_reloader=False)
+    app.run(host=args["host"], port=args["port"], debug=args["debug"], threaded=True, use_reloader=False, ssl_context='adhoc')
 
     CameraView.camera.close()
 
