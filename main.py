@@ -36,7 +36,7 @@ def main(args):
     CameraView.register(app)
 
     argsParser = argparse.ArgumentParser()
-    argsParser.add_argument("--port", type=int, default=8080, help="port to listen on", required=False)
+    argsParser.add_argument("--port", type=int, default=8443, help="port to listen on", required=False)
     argsParser.add_argument("--host", type=str, default="0.0.0.0", help="ip to bind", required=False)
     argsParser.add_argument("--debug", action="store_true", default=False, help="debug mode", required=False)
     args = vars(argsParser.parse_args())
